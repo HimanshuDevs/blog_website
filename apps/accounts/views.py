@@ -1,6 +1,5 @@
 from fastapi import UploadFile, HTTPException
 from pathlib import Path
-from datetime import datetime
 import shutil
 
 MEDIA_DIR = Path("media/users")
@@ -13,7 +12,7 @@ async def handle_create_user(request):
             raise HTTPException(status_code=400, detail="Only image files are allowed.")
 
         # Save profile picture
-        filename = f"{datetime.utcnow().timestamp()}_{request.profile_pic.filename}"
+        filename = f"{request.profile_pic.filename}"
         file_path = MEDIA_DIR / filename
 
         with open(file_path, "wb") as buffer:
