@@ -20,3 +20,6 @@ steps
 2. alembic init alembic
 3. alembic revision --autogenerate -m "create user" (to generate the migrations)
 4. alembic upgrade head (to apply migrations in database)
+
+<!-- DATABASE_URL = 'mysql+asyncmy://root:@localhost/blog_website'
+ALEMBIC_DATABASE_URL = 'mysql+pymysql://root:@localhost/blog_website' -->
