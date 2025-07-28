@@ -1,19 +1,18 @@
 from fastapi import UploadFile, HTTPException
 from pathlib import Path
 import shutil
+from .models import AuthUsers
+from sqlalchemy.ext.asyncio import AsyncSession
+from config.settings import MEDIA_USERS_DIR
+from utils.file_validator import validate_image_upload
 
-MEDIA_DIR = Path("media/users")
-MEDIA_DIR.mkdir(parents=True, exist_ok=True)
 
-async def handle_create_user(request):
-    # Validate file type
+async def handle_create_user(request, db):
     if request.profile_pic:
-        if not request.profile_pic.content_type.startswith("image/"):
-            raise HTTPException(status_code=400, detail="Only image files are allowed.")
+        await validate_image_upload(request.profile_pic)
 
-        # Save profile picture
         filename = f"{request.profile_pic.filename}"
-        file_path = MEDIA_DIR / filename
+        file_path = MEDIA_USERS_DIR / filename
 
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(request.profile_pic.file, buffer)
@@ -22,14 +21,16 @@ async def handle_create_user(request):
     else:
         profile_pic_path = None
 
-    # Simulate DB save (replace this with real DB interaction)
-    user_data = {
-        "username": request.username,
-        "role_id": request.role_id,
-        "email": request.email,
-        "password": request.password,
-        "profile_pic": profile_pic_path
-    }
+    user_data = AuthUsers(
+        username     = request.username,
+        role_id      = request.role_id,
+        email        = request.email,
+        password     = request.password,
+        profile_pic  = profile_pic_path
+    )
+    db.add(user_data)
+    await db.commit()
+    await db.refresh(user_data)
 
     return {
         "status": "success",

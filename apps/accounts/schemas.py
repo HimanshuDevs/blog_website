@@ -13,7 +13,7 @@ from fastapi import Form, File, UploadFile
 class CreateUserForm:
     def __init__(self,
         username    : str = Form(...),
-        role_id     : int = Form(...),
+        role_id     : int = Form(..., gt=0),
         email       : Optional[str] = Form(..., min_length=5,max_length=50),
         password    : Optional[str] = Form(..., min_length=3, max_length=20),
         profile_pic : Optional[UploadFile] = File(None)

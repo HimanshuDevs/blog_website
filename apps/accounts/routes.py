@@ -9,4 +9,4 @@ router = APIRouter()
 
 @router.post('/create-user')
 async def create_user(request: CreateUserForm = Depends(), db: AsyncSession = Depends(get_async_db)):
-    return await handle_create_user(request)
+    return await handle_create_user(request,db)
