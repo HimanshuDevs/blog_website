@@ -7,6 +7,7 @@ from alembic import context
 
 from config.database import Base
 from apps.accounts.models import RoleMaster, AuthUsers
+from apps.blogs.models import Blogs, BlogsLikes, BlogsComments
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
