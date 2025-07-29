@@ -23,3 +23,7 @@ class CreateUserForm:
         self.email = email
         self.password = password
         self.profile_pic = profile_pic
+
+class UserLoginSchema(BaseModel):
+    username       : str = Field(min_length=5)
+    password       : str = Field(min_length=3)
